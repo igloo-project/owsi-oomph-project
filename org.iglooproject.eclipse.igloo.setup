@@ -7,8 +7,8 @@
     xmlns:maven="http://www.eclipse.org/oomph/setup/maven/1.0"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/maven/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore"
-    name="org.iglooproject.eclipse.project"
-    label="igloo simple project">
+    name="org.iglooproject.eclipse.igloo"
+    label="igloo development">
   <setupTask
       xsi:type="setup:CompoundTask"
       name="User Preferences">
@@ -235,7 +235,7 @@
           xsi:type="setup:PreferenceTask"
           filter=""
           key="/instance/org.eclipse.wst.server.core/runtimes"
-          value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;runtimes>&#xA;  &lt;runtime id=&quot;Apache Tomcat v7.0&quot; location=&quot;${tomcat.location}&quot; name=&quot;Apache Tomcat v7.0&quot; runtime-type-id=&quot;org.eclipse.jst.server.tomcat.runtime.70&quot; timestamp=&quot;0&quot;/>&#xA;&lt;/runtimes>&#xA;"/>
+          value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;runtimes>&#xA;  &lt;runtime id=&quot;Apache Tomcat v8.5&quot; location=&quot;${tomcat.location}&quot; name=&quot;Apache Tomcat v8.5&quot; runtime-type-id=&quot;org.eclipse.jst.server.tomcat.runtime.85&quot; timestamp=&quot;0&quot;/>&#xA;&lt;/runtimes>&#xA;"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -284,7 +284,7 @@
   </setupTask>
   <setupTask
       xsi:type="setup:ResourceCreationTask"
-      content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;servers>&#xA;  &lt;server auto-publish-setting=&quot;2&quot; auto-publish-time=&quot;1&quot; configuration-id=&quot;/${maven.project.name}/eclipse/tomcat-main&quot; deployDir=&quot;wtpwebapps&quot; hostname=&quot;localhost&quot; id=&quot;tomcat7&quot; name=&quot;tomcat7&quot; runtime-id=&quot;Apache Tomcat v7.0&quot; server-type=&quot;org.eclipse.jst.server.tomcat.70&quot; server-type-id=&quot;org.eclipse.jst.server.tomcat.70&quot; start-timeout=&quot;450&quot; stop-timeout=&quot;150&quot; testEnvironment=&quot;true&quot; timestamp=&quot;2&quot;>&#xA;    &lt;list key=&quot;modules&quot; value0=&quot;${webapp.name}::org.eclipse.jst.jee.server:${webapp.name}::jst.web::3.0&quot;/>&#xA;  &lt;/server>&#xA;&lt;/servers>"
+      content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;servers>&#xA;  &lt;server auto-publish-setting=&quot;2&quot; auto-publish-time=&quot;1&quot; configuration-id=&quot;/${maven.project.name}/basic-application/eclipse/tomcat-main&quot; deployDir=&quot;wtpwebapps&quot; hostname=&quot;localhost&quot; id=&quot;tomcat85&quot; name=&quot;tomcat85&quot; runtime-id=&quot;Apache Tomcat v8.5&quot; server-type=&quot;org.eclipse.jst.server.tomcat.85&quot; server-type-id=&quot;org.eclipse.jst.server.tomcat.85&quot; start-timeout=&quot;450&quot; stop-timeout=&quot;150&quot; testEnvironment=&quot;true&quot; timestamp=&quot;2&quot;>&#xA;    &lt;list key=&quot;modules&quot; value0=&quot;${webapp.name}::org.eclipse.jst.jee.server:${webapp.name}::jst.web::3.0&quot;/>&#xA;  &lt;/server>&#xA;&lt;/servers>"
       targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.wst.server.core/servers.xml"
       encoding="UTF-8">
     <description>tomcat server integration</description>
@@ -299,6 +299,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="git.project.name"
+      value="igloo-parent"
       storageURI="scope://Workspace"
       label="Nom du projet git">
     <description>Nom du projet (correspond à la dernière partie du chemin dans l'url du dépôt)</description>
@@ -306,6 +307,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="repository.choice"
+      value="git@github.com:igloo-project/igloo-parent.git"
       storageURI="scope://Workspace"
       label="Url du dépôt">
     <description>Url du dépôt</description>
@@ -320,7 +322,8 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="maven.project.name"
-      defaultValue="$${git.project.name}"
+      value="igloo-parent"
+      defaultValue=""
       storageURI="scope://Workspace"
       label="Nom du projet maven">
     <description>Nom du projet maven de l'application</description>
@@ -336,7 +339,8 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="webapp.name"
-      defaultValue="$${git.project.name}-webapp"
+      value="basic-application-webapp"
+      defaultValue=""
       storageURI="scope://Workspace"
       label="Nom de la webapp">
     <description>Nom de la webapp qui doit être déployée</description>
@@ -344,7 +348,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="tomcat.location"
-      defaultValue="$${user.home}/Documents/apps/apache-tomcat-7.0.53"
+      defaultValue="$${user.home}/Documents/apps/apache-tomcat-8.5.23"
       storageURI="scope://Workspace"
       label="Répertoire du tomcat">
     <description>Nom du répertoire ou se trouve le tomcat à utiliser</description>
