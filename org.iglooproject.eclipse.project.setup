@@ -73,6 +73,14 @@
       id="group.preferences"
       name="Preferences">
     <setupTask
+        xsi:type="setup:EclipseIniTask"
+        disabled="true"
+        option="-Xmx"
+        value="2048m"
+        vm="true">
+      <description>Set the heap space needed to work with the projects of ${scope.project.label}</description>
+    </setupTask>
+    <setupTask
         xsi:type="setup:CompoundTask"
         name="User Preferences">
       <setupTask
@@ -110,6 +118,10 @@
             xsi:type="setup:PreferenceTask"
             key="/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.compiler.problem.missingDeprecatedAnnotation"
             value="warning"/>
+        <setupTask
+            xsi:type="setup:PreferenceTask"
+            key="/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.compiler.problem.unusedImport"
+            value="error"/>
         <setupTask
             xsi:type="setup:PreferenceTask"
             key="/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.lineSplit"
@@ -316,14 +328,6 @@
             key="/instance/org.jboss.tools.maven.apt/org.jboss.tools.maven.apt.mode"
             value="maven_execution"/>
       </setupTask>
-    </setupTask>
-    <setupTask
-        xsi:type="setup:EclipseIniTask"
-        disabled="true"
-        option="-Xmx"
-        value="2048m"
-        vm="true">
-      <description>Set the heap space needed to work with the projects of ${scope.project.label}</description>
     </setupTask>
     <description>Preferences</description>
   </setupTask>
