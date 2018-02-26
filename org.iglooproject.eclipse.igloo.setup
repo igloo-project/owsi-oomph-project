@@ -5,8 +5,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:git="http://www.eclipse.org/oomph/setup/git/1.0"
     xmlns:maven="http://www.eclipse.org/oomph/setup/maven/1.0"
+    xmlns:predicates="http://www.eclipse.org/oomph/predicates/1.0"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
-    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/maven/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore"
+    xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/maven/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore"
     name="org.iglooproject.eclipse.igloo"
     label="igloo development">
   <setupTask
@@ -393,6 +395,66 @@
       id="group.launchers"
       name="Launchers">
     <description>Launchers</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup.workingsets:WorkingSetTask"
+      id="workingsets">
+    <workingSet
+        name="Components"
+        id="workingset.components">
+      <predicate
+          xsi:type="predicates:LocationPredicate"
+          pattern=".*/igloo-components.*"/>
+    </workingSet>
+    <workingSet
+        name="Basic application"
+        id="workingset.basicapplication">
+      <predicate
+          xsi:type="predicates:LocationPredicate"
+          pattern=".*/basic-application.*"/>
+    </workingSet>
+    <workingSet
+        name="Packages"
+        id="workingset.packages">
+      <predicate
+          xsi:type="predicates:LocationPredicate"
+          pattern=".*/igloo-packages.*"/>
+    </workingSet>
+    <workingSet
+        name="Dependencies"
+        id="workingset.dependencies">
+      <predicate
+          xsi:type="predicates:LocationPredicate"
+          pattern=".*/igloo-dependencies.*"/>
+    </workingSet>
+    <workingSet
+        name="Maven"
+        id="workingset.maven">
+      <predicate
+          xsi:type="predicates:LocationPredicate"
+          pattern=".*/igloo-parents.*"/>
+    </workingSet>
+    <workingSet
+        name="Components (JPA)"
+        id="workingset.componentsjpa">
+      <predicate
+          xsi:type="predicates:LocationPredicate"
+          pattern=".*/igloo-component-jpa.*"/>
+    </workingSet>
+    <workingSet
+        name="Components (Wicket)"
+        id="workingset.componentswicket">
+      <predicate
+          xsi:type="predicates:LocationPredicate"
+          pattern=".*/igloo-component-wicket.*"/>
+    </workingSet>
+    <workingSet
+        name="Webjars"
+        id="workingset.webjars">
+      <predicate
+          xsi:type="predicates:LocationPredicate"
+          pattern=".*/igloo-webjars.*"/>
+    </workingSet>
   </setupTask>
   <stream name="master"
       label="Master"/>
