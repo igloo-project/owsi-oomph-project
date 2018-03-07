@@ -455,6 +455,13 @@
           xsi:type="predicates:LocationPredicate"
           pattern=".*/igloo-webjars.*"/>
     </workingSet>
+    <workingSet
+        name="Integration"
+        id="workingset.integration">
+      <predicate
+          xsi:type="predicates:LocationPredicate"
+          pattern=".*/igloo-integration.*"/>
+    </workingSet>
   </setupTask>
   <stream name="master"
       label="Master"/>
