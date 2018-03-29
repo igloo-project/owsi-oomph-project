@@ -310,7 +310,7 @@
             xsi:type="setup:PreferenceTask"
             filter=""
             key="/instance/org.eclipse.wst.server.core/runtimes"
-            value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;runtimes>&#xA;  &lt;runtime id=&quot;Apache Tomcat v7.0&quot; location=&quot;${tomcat.location}&quot; name=&quot;Apache Tomcat v7.0&quot; runtime-type-id=&quot;org.eclipse.jst.server.tomcat.runtime.70&quot; timestamp=&quot;0&quot;/>&#xA;&lt;/runtimes>&#xA;"/>
+            value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;runtimes>&#xA;  &lt;runtime id=&quot;Apache Tomcat v8.5&quot; location=&quot;${tomcat.location}&quot; name=&quot;Apache Tomcat v8.5&quot; runtime-type-id=&quot;org.eclipse.jst.server.tomcat.runtime.85&quot; timestamp=&quot;0&quot;/>&#xA;&lt;/runtimes>&#xA;"/>
       </setupTask>
       <setupTask
           xsi:type="setup:CompoundTask"
@@ -359,7 +359,8 @@
         xsi:type="maven:MavenImportTask"
         projectNameTemplate="">
       <sourceLocator
-          rootFolder="${user.home}/git/${git.clone.name}"/>
+          rootFolder="${user.home}/git/${git.clone.name}"
+          locateNestedProjects="true"/>
       <description></description>
     </setupTask>
     <description>Git</description>
@@ -370,7 +371,7 @@
       name="Tomcat">
     <setupTask
         xsi:type="setup:ResourceCreationTask"
-        content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;servers>&#xA;  &lt;server auto-publish-setting=&quot;2&quot; auto-publish-time=&quot;1&quot; configuration-id=&quot;/${maven.project.name}/eclipse/tomcat-main&quot; deployDir=&quot;wtpwebapps&quot; hostname=&quot;localhost&quot; id=&quot;tomcat7&quot; name=&quot;tomcat7&quot; runtime-id=&quot;Apache Tomcat v7.0&quot; server-type=&quot;org.eclipse.jst.server.tomcat.70&quot; server-type-id=&quot;org.eclipse.jst.server.tomcat.70&quot; start-timeout=&quot;450&quot; stop-timeout=&quot;150&quot; testEnvironment=&quot;true&quot; timestamp=&quot;2&quot;>&#xA;    &lt;list key=&quot;modules&quot; value0=&quot;${webapp.name}::org.eclipse.jst.jee.server:${webapp.name}::jst.web::3.0&quot;/>&#xA;  &lt;/server>&#xA;&lt;/servers>"
+        content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;servers>&#xA;  &lt;server auto-publish-setting=&quot;2&quot; auto-publish-time=&quot;1&quot; configuration-id=&quot;/${maven.project.name}/eclipse/tomcat-main&quot; deployDir=&quot;wtpwebapps&quot; hostname=&quot;localhost&quot; id=&quot;tomcat85&quot; name=&quot;tomcat85&quot; runtime-id=&quot;Apache Tomcat v8.5&quot; server-type=&quot;org.eclipse.jst.server.tomcat.85&quot; server-type-id=&quot;org.eclipse.jst.server.tomcat.85&quot; start-timeout=&quot;450&quot; stop-timeout=&quot;150&quot; testEnvironment=&quot;true&quot; timestamp=&quot;2&quot;>&#xA;    &lt;list key=&quot;modules&quot; value0=&quot;${webapp.name}::org.eclipse.jst.jee.server:${webapp.name}::jst.web::3.0&quot;/>&#xA;  &lt;/server>&#xA;&lt;/servers>"
         targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.wst.server.core/servers.xml"
         encoding="UTF-8">
       <description>tomcat server integration</description>

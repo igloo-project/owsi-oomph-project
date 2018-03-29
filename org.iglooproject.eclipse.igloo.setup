@@ -365,7 +365,8 @@
         xsi:type="maven:MavenImportTask"
         projectNameTemplate="">
       <sourceLocator
-          rootFolder="${user.home}/git/${git.clone.name}"/>
+          rootFolder="${user.home}/git/${git.clone.name}"
+          locateNestedProjects="true"/>
       <description></description>
     </setupTask>
     <description>Git</description>
