@@ -67,7 +67,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="tomcat.location"
-        defaultValue="$${user.home}/Documents/apps/apache-tomcat-8.5.23"
+        defaultValue="$${user.home}/Documents/apps/apache-tomcat-8.5.31"
         storageURI="scope://Workspace"
         label="Répertoire du tomcat">
       <description>Nom du répertoire ou se trouve le tomcat à utiliser</description>
