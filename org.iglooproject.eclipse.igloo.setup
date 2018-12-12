@@ -139,7 +139,7 @@
         <setupTask
             xsi:type="setup:PreferenceTask"
             key="/instance/org.eclipse.jdt.ui/formatter_profile"
-            value="_Open Wide"/>
+            value="_Igloo Kobalt"/>
         <setupTask
             xsi:type="setup:PreferenceTask"
             key="/instance/org.eclipse.jdt.ui/formatter_settings_version"
