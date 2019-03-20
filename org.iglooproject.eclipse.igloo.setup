@@ -175,7 +175,7 @@
         <setupTask
             xsi:type="setup:PreferenceTask"
             key="/instance/org.eclipse.m2e.core/eclipse.m2.updateProjects"
-            value="true"/>
+            value="false"/>
       </setupTask>
       <setupTask
           xsi:type="setup:CompoundTask"
