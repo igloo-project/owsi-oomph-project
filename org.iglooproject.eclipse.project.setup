@@ -53,18 +53,159 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="webapp.name"
-        defaultValue="$${git.project.name}-webapp"
+        defaultValue="$${maven.project.name}-webapp"
         storageURI="scope://Workspace"
         label="Nom de la webapp">
       <description>Nom de la webapp qui doit être déployée</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
-        name="tomcat.location"
-        defaultValue="$${user.home}/Documents/apps/apache-tomcat-85"
+        name="igloo.tomcat.version"
+        defaultValue="9.0"
         storageURI="scope://Workspace"
-        label="Répertoire du tomcat">
-      <description>Nom du répertoire ou se trouve le tomcat à utiliser</description>
+        label="Tomcat version">
+      <choice
+          value="8.5"
+          label="8.5"/>
+      <choice
+          value="9.0"
+          label="9.0"/>
+      <description>Tomcat version (for servers initialization)</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="igloo.tomcat.versions">
+      <setupTask
+          xsi:type="setup:CompoundTask"
+          filter=""
+          name="igloo.tomcat.85">
+        <setupTask
+            xsi:type="setup:VariableTask"
+            filter=""
+            name="igloo.tomcat.85.location"
+            value="$${user.home}/Documents/apps/apache-tomcat-85"
+            defaultValue="">
+          <description>Default server.xml, extracted from tomcat installation, with &lt;Context... /> added for webapp initialization</description>
+        </setupTask>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.85.version.id"
+            value="85"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.85.version"
+            value="8.5"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.85.runtime.id"
+            value="tomcat85"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.85.server.id"
+            value="tomcat85"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            type="TEXT"
+            name="igloo.tomcat.85.server_xml"
+            value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&lt;!--&#xA;  Licensed to the Apache Software Foundation (ASF) under one or more&#xA;  contributor license agreements.  See the NOTICE file distributed with&#xA;  this work for additional information regarding copyright ownership.&#xA;  The ASF licenses this file to You under the Apache License, Version 2.0&#xA;  (the &quot;License&quot;); you may not use this file except in compliance with&#xA;  the License.  You may obtain a copy of the License at&#xA;&#xA;      http://www.apache.org/licenses/LICENSE-2.0&#xA;&#xA;  Unless required by applicable law or agreed to in writing, software&#xA;  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,&#xA;  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xA;  See the License for the specific language governing permissions and&#xA;  limitations under the License.&#xA;-->&#xA;&lt;!-- Note:  A &quot;Server&quot; is not itself a &quot;Container&quot;, so you may not&#xA;     define subcomponents such as &quot;Valves&quot; at this level.&#xA;     Documentation at /docs/config/server.html&#xA; -->&#xA;&lt;Server port=&quot;8005&quot; shutdown=&quot;SHUTDOWN&quot;>&#xA;  &lt;Listener className=&quot;org.apache.catalina.startup.VersionLoggerListener&quot; />&#xA;  &lt;!-- Security listener. Documentation at /docs/config/listeners.html&#xA;  &lt;Listener className=&quot;org.apache.catalina.security.SecurityListener&quot; />&#xA;  -->&#xA;  &lt;!--APR library loader. Documentation at /docs/apr.html -->&#xA;  &lt;Listener className=&quot;org.apache.catalina.core.AprLifecycleListener&quot; SSLEngine=&quot;on&quot; />&#xA;  &lt;!-- Prevent memory leaks due to use of particular java/javax APIs-->&#xA;  &lt;Listener className=&quot;org.apache.catalina.core.JreMemoryLeakPreventionListener&quot; />&#xA;  &lt;Listener className=&quot;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&quot; />&#xA;  &lt;Listener className=&quot;org.apache.catalina.core.ThreadLocalLeakPreventionListener&quot; />&#xA;&#xA;  &lt;!-- Global JNDI resources&#xA;       Documentation at /docs/jndi-resources-howto.html&#xA;  -->&#xA;  &lt;GlobalNamingResources>&#xA;    &lt;!-- Editable user database that can also be used by&#xA;         UserDatabaseRealm to authenticate users&#xA;    -->&#xA;    &lt;Resource name=&quot;UserDatabase&quot; auth=&quot;Container&quot;&#xA;              type=&quot;org.apache.catalina.UserDatabase&quot;&#xA;              description=&quot;User database that can be updated and saved&quot;&#xA;              factory=&quot;org.apache.catalina.users.MemoryUserDatabaseFactory&quot;&#xA;              pathname=&quot;conf/tomcat-users.xml&quot; />&#xA;  &lt;/GlobalNamingResources>&#xA;&#xA;  &lt;!-- A &quot;Service&quot; is a collection of one or more &quot;Connectors&quot; that share&#xA;       a single &quot;Container&quot; Note:  A &quot;Service&quot; is not itself a &quot;Container&quot;,&#xA;       so you may not define subcomponents such as &quot;Valves&quot; at this level.&#xA;       Documentation at /docs/config/service.html&#xA;   -->&#xA;  &lt;Service name=&quot;Catalina&quot;>&#xA;&#xA;    &lt;!--The connectors can use a shared executor, you can define one or more named thread pools-->&#xA;    &lt;!--&#xA;    &lt;Executor name=&quot;tomcatThreadPool&quot; namePrefix=&quot;catalina-exec-&quot;&#xA;        maxThreads=&quot;150&quot; minSpareThreads=&quot;4&quot;/>&#xA;    -->&#xA;&#xA;&#xA;    &lt;!-- A &quot;Connector&quot; represents an endpoint by which requests are received&#xA;         and responses are returned. Documentation at :&#xA;         Java HTTP Connector: /docs/config/http.html&#xA;         Java AJP  Connector: /docs/config/ajp.html&#xA;         APR (HTTP/AJP) Connector: /docs/apr.html&#xA;         Define a non-SSL/TLS HTTP/1.1 Connector on port 8080&#xA;    -->&#xA;    &lt;Connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot;&#xA;               connectionTimeout=&quot;20000&quot;&#xA;               redirectPort=&quot;8443&quot; />&#xA;    &lt;!-- A &quot;Connector&quot; using the shared thread pool-->&#xA;    &lt;!--&#xA;    &lt;Connector executor=&quot;tomcatThreadPool&quot;&#xA;               port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot;&#xA;               connectionTimeout=&quot;20000&quot;&#xA;               redirectPort=&quot;8443&quot; />&#xA;    -->&#xA;    &lt;!-- Define a SSL/TLS HTTP/1.1 Connector on port 8443&#xA;         This connector uses the NIO implementation. The default&#xA;         SSLImplementation will depend on the presence of the APR/native&#xA;         library and the useOpenSSL attribute of the&#xA;         AprLifecycleListener.&#xA;         Either JSSE or OpenSSL style configuration may be used regardless of&#xA;         the SSLImplementation selected. JSSE style configuration is used below.&#xA;    -->&#xA;    &lt;!--&#xA;    &lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11NioProtocol&quot;&#xA;               maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot;>&#xA;        &lt;SSLHostConfig>&#xA;            &lt;Certificate certificateKeystoreFile=&quot;conf/localhost-rsa.jks&quot;&#xA;                         type=&quot;RSA&quot; />&#xA;        &lt;/SSLHostConfig>&#xA;    &lt;/Connector>&#xA;    -->&#xA;    &lt;!-- Define a SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2&#xA;         This connector uses the APR/native implementation which always uses&#xA;         OpenSSL for TLS.&#xA;         Either JSSE or OpenSSL style configuration may be used. OpenSSL style&#xA;         configuration is used below.&#xA;    -->&#xA;    &lt;!--&#xA;    &lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11AprProtocol&quot;&#xA;               maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot; >&#xA;        &lt;UpgradeProtocol className=&quot;org.apache.coyote.http2.Http2Protocol&quot; />&#xA;        &lt;SSLHostConfig>&#xA;            &lt;Certificate certificateKeyFile=&quot;conf/localhost-rsa-key.pem&quot;&#xA;                         certificateFile=&quot;conf/localhost-rsa-cert.pem&quot;&#xA;                         certificateChainFile=&quot;conf/localhost-rsa-chain.pem&quot;&#xA;                         type=&quot;RSA&quot; />&#xA;        &lt;/SSLHostConfig>&#xA;    &lt;/Connector>&#xA;    -->&#xA;&#xA;    &lt;!-- Define an AJP 1.3 Connector on port 8009 -->&#xA;    &lt;Connector port=&quot;8009&quot; protocol=&quot;AJP/1.3&quot; redirectPort=&quot;8443&quot; />&#xA;&#xA;&#xA;    &lt;!-- An Engine represents the entry point (within Catalina) that processes&#xA;         every request.  The Engine implementation for Tomcat stand alone&#xA;         analyzes the HTTP headers included with the request, and passes them&#xA;         on to the appropriate Host (virtual host).&#xA;         Documentation at /docs/config/engine.html -->&#xA;&#xA;    &lt;!-- You should set jvmRoute to support load-balancing via AJP ie :&#xA;    &lt;Engine name=&quot;Catalina&quot; defaultHost=&quot;localhost&quot; jvmRoute=&quot;jvm1&quot;>&#xA;    -->&#xA;    &lt;Engine name=&quot;Catalina&quot; defaultHost=&quot;localhost&quot;>&#xA;&#xA;      &lt;!--For clustering, please take a look at documentation at:&#xA;          /docs/cluster-howto.html  (simple how to)&#xA;          /docs/config/cluster.html (reference documentation) -->&#xA;      &lt;!--&#xA;      &lt;Cluster className=&quot;org.apache.catalina.ha.tcp.SimpleTcpCluster&quot;/>&#xA;      -->&#xA;&#xA;      &lt;!-- Use the LockOutRealm to prevent attempts to guess user passwords&#xA;           via a brute-force attack -->&#xA;      &lt;Realm className=&quot;org.apache.catalina.realm.LockOutRealm&quot;>&#xA;        &lt;!-- This Realm uses the UserDatabase configured in the global JNDI&#xA;             resources under the key &quot;UserDatabase&quot;.  Any edits&#xA;             that are performed against this UserDatabase are immediately&#xA;             available for use by the Realm.  -->&#xA;        &lt;Realm className=&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;&#xA;               resourceName=&quot;UserDatabase&quot;/>&#xA;      &lt;/Realm>&#xA;&#xA;      &lt;Host name=&quot;localhost&quot;  appBase=&quot;webapps&quot;&#xA;            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;>&#xA;&#xA;        &lt;!-- SingleSignOn valve, share authentication between web applications&#xA;             Documentation at: /docs/config/valve.html -->&#xA;        &lt;!--&#xA;        &lt;Valve className=&quot;org.apache.catalina.authenticator.SingleSignOn&quot; />&#xA;        -->&#xA;&#xA;        &lt;!-- Access log processes all example.&#xA;             Documentation at: /docs/config/valve.html&#xA;             Note: The pattern used is equivalent to using pattern=&quot;common&quot; -->&#xA;        &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;&#xA;               prefix=&quot;localhost_access_log&quot; suffix=&quot;.txt&quot;&#xA;               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; />&#xA;&#xA;        ${igloo.tomcat.server_xml.context}&#xA;      &lt;/Host>&#xA;    &lt;/Engine>&#xA;  &lt;/Service>&#xA;&lt;/Server>"/>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:CompoundTask"
+          filter=""
+          name="igloo.tomcat.90">
+        <setupTask
+            xsi:type="setup:VariableTask"
+            filter=""
+            name="igloo.tomcat.90.location"
+            value="$${user.home}/Documents/apps/apache-tomcat-9"
+            defaultValue=""/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.90.version.id"
+            value="90"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.90.version"
+            value="9.0"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.90.runtime.id"
+            value="tomcat90"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.90.server.id"
+            value="tomcat90"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            type="TEXT"
+            name="igloo.tomcat.90.server_xml"
+            value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&lt;!--&#xA;  Licensed to the Apache Software Foundation (ASF) under one or more&#xA;  contributor license agreements.  See the NOTICE file distributed with&#xA;  this work for additional information regarding copyright ownership.&#xA;  The ASF licenses this file to You under the Apache License, Version 2.0&#xA;  (the &quot;License&quot;); you may not use this file except in compliance with&#xA;  the License.  You may obtain a copy of the License at&#xA;&#xA;      http://www.apache.org/licenses/LICENSE-2.0&#xA;&#xA;  Unless required by applicable law or agreed to in writing, software&#xA;  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,&#xA;  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xA;  See the License for the specific language governing permissions and&#xA;  limitations under the License.&#xA;-->&#xA;&lt;!-- Note:  A &quot;Server&quot; is not itself a &quot;Container&quot;, so you may not&#xA;     define subcomponents such as &quot;Valves&quot; at this level.&#xA;     Documentation at /docs/config/server.html&#xA; -->&#xA;&lt;Server port=&quot;8005&quot; shutdown=&quot;SHUTDOWN&quot;>&#xA;  &lt;Listener className=&quot;org.apache.catalina.startup.VersionLoggerListener&quot; />&#xA;  &lt;!-- Security listener. Documentation at /docs/config/listeners.html&#xA;  &lt;Listener className=&quot;org.apache.catalina.security.SecurityListener&quot; />&#xA;  -->&#xA;  &lt;!--APR library loader. Documentation at /docs/apr.html -->&#xA;  &lt;Listener className=&quot;org.apache.catalina.core.AprLifecycleListener&quot; SSLEngine=&quot;on&quot; />&#xA;  &lt;!-- Prevent memory leaks due to use of particular java/javax APIs-->&#xA;  &lt;Listener className=&quot;org.apache.catalina.core.JreMemoryLeakPreventionListener&quot; />&#xA;  &lt;Listener className=&quot;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&quot; />&#xA;  &lt;Listener className=&quot;org.apache.catalina.core.ThreadLocalLeakPreventionListener&quot; />&#xA;&#xA;  &lt;!-- Global JNDI resources&#xA;       Documentation at /docs/jndi-resources-howto.html&#xA;  -->&#xA;  &lt;GlobalNamingResources>&#xA;    &lt;!-- Editable user database that can also be used by&#xA;         UserDatabaseRealm to authenticate users&#xA;    -->&#xA;    &lt;Resource name=&quot;UserDatabase&quot; auth=&quot;Container&quot;&#xA;              type=&quot;org.apache.catalina.UserDatabase&quot;&#xA;              description=&quot;User database that can be updated and saved&quot;&#xA;              factory=&quot;org.apache.catalina.users.MemoryUserDatabaseFactory&quot;&#xA;              pathname=&quot;conf/tomcat-users.xml&quot; />&#xA;  &lt;/GlobalNamingResources>&#xA;&#xA;  &lt;!-- A &quot;Service&quot; is a collection of one or more &quot;Connectors&quot; that share&#xA;       a single &quot;Container&quot; Note:  A &quot;Service&quot; is not itself a &quot;Container&quot;,&#xA;       so you may not define subcomponents such as &quot;Valves&quot; at this level.&#xA;       Documentation at /docs/config/service.html&#xA;   -->&#xA;  &lt;Service name=&quot;Catalina&quot;>&#xA;&#xA;    &lt;!--The connectors can use a shared executor, you can define one or more named thread pools-->&#xA;    &lt;!--&#xA;    &lt;Executor name=&quot;tomcatThreadPool&quot; namePrefix=&quot;catalina-exec-&quot;&#xA;        maxThreads=&quot;150&quot; minSpareThreads=&quot;4&quot;/>&#xA;    -->&#xA;&#xA;&#xA;    &lt;!-- A &quot;Connector&quot; represents an endpoint by which requests are received&#xA;         and responses are returned. Documentation at :&#xA;         Java HTTP Connector: /docs/config/http.html&#xA;         Java AJP  Connector: /docs/config/ajp.html&#xA;         APR (HTTP/AJP) Connector: /docs/apr.html&#xA;         Define a non-SSL/TLS HTTP/1.1 Connector on port 8080&#xA;    -->&#xA;    &lt;Connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot;&#xA;               connectionTimeout=&quot;20000&quot;&#xA;               redirectPort=&quot;8443&quot; />&#xA;    &lt;!-- A &quot;Connector&quot; using the shared thread pool-->&#xA;    &lt;!--&#xA;    &lt;Connector executor=&quot;tomcatThreadPool&quot;&#xA;               port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot;&#xA;               connectionTimeout=&quot;20000&quot;&#xA;               redirectPort=&quot;8443&quot; />&#xA;    -->&#xA;    &lt;!-- Define a SSL/TLS HTTP/1.1 Connector on port 8443&#xA;         This connector uses the NIO implementation. The default&#xA;         SSLImplementation will depend on the presence of the APR/native&#xA;         library and the useOpenSSL attribute of the&#xA;         AprLifecycleListener.&#xA;         Either JSSE or OpenSSL style configuration may be used regardless of&#xA;         the SSLImplementation selected. JSSE style configuration is used below.&#xA;    -->&#xA;    &lt;!--&#xA;    &lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11NioProtocol&quot;&#xA;               maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot;>&#xA;        &lt;SSLHostConfig>&#xA;            &lt;Certificate certificateKeystoreFile=&quot;conf/localhost-rsa.jks&quot;&#xA;                         type=&quot;RSA&quot; />&#xA;        &lt;/SSLHostConfig>&#xA;    &lt;/Connector>&#xA;    -->&#xA;    &lt;!-- Define a SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2&#xA;         This connector uses the APR/native implementation which always uses&#xA;         OpenSSL for TLS.&#xA;         Either JSSE or OpenSSL style configuration may be used. OpenSSL style&#xA;         configuration is used below.&#xA;    -->&#xA;    &lt;!--&#xA;    &lt;Connector port=&quot;8443&quot; protocol=&quot;org.apache.coyote.http11.Http11AprProtocol&quot;&#xA;               maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot; >&#xA;        &lt;UpgradeProtocol className=&quot;org.apache.coyote.http2.Http2Protocol&quot; />&#xA;        &lt;SSLHostConfig>&#xA;            &lt;Certificate certificateKeyFile=&quot;conf/localhost-rsa-key.pem&quot;&#xA;                         certificateFile=&quot;conf/localhost-rsa-cert.pem&quot;&#xA;                         certificateChainFile=&quot;conf/localhost-rsa-chain.pem&quot;&#xA;                         type=&quot;RSA&quot; />&#xA;        &lt;/SSLHostConfig>&#xA;    &lt;/Connector>&#xA;    -->&#xA;&#xA;    &lt;!-- Define an AJP 1.3 Connector on port 8009 -->&#xA;    &lt;Connector port=&quot;8009&quot; protocol=&quot;AJP/1.3&quot; redirectPort=&quot;8443&quot; />&#xA;&#xA;&#xA;    &lt;!-- An Engine represents the entry point (within Catalina) that processes&#xA;         every request.  The Engine implementation for Tomcat stand alone&#xA;         analyzes the HTTP headers included with the request, and passes them&#xA;         on to the appropriate Host (virtual host).&#xA;         Documentation at /docs/config/engine.html -->&#xA;&#xA;    &lt;!-- You should set jvmRoute to support load-balancing via AJP ie :&#xA;    &lt;Engine name=&quot;Catalina&quot; defaultHost=&quot;localhost&quot; jvmRoute=&quot;jvm1&quot;>&#xA;    -->&#xA;    &lt;Engine name=&quot;Catalina&quot; defaultHost=&quot;localhost&quot;>&#xA;&#xA;      &lt;!--For clustering, please take a look at documentation at:&#xA;          /docs/cluster-howto.html  (simple how to)&#xA;          /docs/config/cluster.html (reference documentation) -->&#xA;      &lt;!--&#xA;      &lt;Cluster className=&quot;org.apache.catalina.ha.tcp.SimpleTcpCluster&quot;/>&#xA;      -->&#xA;&#xA;      &lt;!-- Use the LockOutRealm to prevent attempts to guess user passwords&#xA;           via a brute-force attack -->&#xA;      &lt;Realm className=&quot;org.apache.catalina.realm.LockOutRealm&quot;>&#xA;        &lt;!-- This Realm uses the UserDatabase configured in the global JNDI&#xA;             resources under the key &quot;UserDatabase&quot;.  Any edits&#xA;             that are performed against this UserDatabase are immediately&#xA;             available for use by the Realm.  -->&#xA;        &lt;Realm className=&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;&#xA;               resourceName=&quot;UserDatabase&quot;/>&#xA;      &lt;/Realm>&#xA;&#xA;      &lt;Host name=&quot;localhost&quot;  appBase=&quot;webapps&quot;&#xA;            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;>&#xA;&#xA;        &lt;!-- SingleSignOn valve, share authentication between web applications&#xA;             Documentation at: /docs/config/valve.html -->&#xA;        &lt;!--&#xA;        &lt;Valve className=&quot;org.apache.catalina.authenticator.SingleSignOn&quot; />&#xA;        -->&#xA;&#xA;        &lt;!-- Access log processes all example.&#xA;             Documentation at: /docs/config/valve.html&#xA;             Note: The pattern used is equivalent to using pattern=&quot;common&quot; -->&#xA;        &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;&#xA;               prefix=&quot;localhost_access_log&quot; suffix=&quot;.txt&quot;&#xA;               pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; />&#xA;      &#xA;      ${igloo.tomcat.server_xml.context}&#xA;      &lt;/Host>&#xA;    &lt;/Engine>&#xA;  &lt;/Service>&#xA;&lt;/Server>">
+          <description>Default server.xml, extracted from tomcat installation, with &lt;Context... /> added for webapp initialization</description>
+        </setupTask>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="igloo.tomcat.server_xml.context"
+          value="&lt;Context docBase=&quot;${webapp.name}&quot; path=&quot;/${maven.project.name}&quot; reloadable=&quot;true&quot; source=&quot;org.eclipse.jst.jee.server:${webapp.name}&quot;/>">
+        <description>&lt;Context ... /> injected in server.xml to add webapp</description>
+      </setupTask>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="tomcat.version.conditional">
+      <setupTask
+          xsi:type="setup:CompoundTask"
+          filter="(igloo.tomcat.version=8.5)"
+          name="igloo.tomcat.conditional.85">
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.location"
+            value="${igloo.tomcat.85.location}"
+            defaultValue=""/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.version.id"
+            value="${igloo.tomcat.85.version.id}"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.runtime.id"
+            value="${igloo.tomcat.85.runtime.id}"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.server.id"
+            value="${igloo.tomcat.85.server.id}"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.server_xml"
+            value="${igloo.tomcat.85.server_xml}"/>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:CompoundTask"
+          filter="(igloo.tomcat.version=9.0)"
+          name="igloo.tomcat.conditional.90">
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.location"
+            value="${igloo.tomcat.90.location}"
+            defaultValue=""/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.version.id"
+            value="${igloo.tomcat.90.version.id}"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.runtime.id"
+            value="${igloo.tomcat.90.runtime.id}"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.server.id"
+            value="${igloo.tomcat.90.server.id}"/>
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="igloo.tomcat.server_xml"
+            value="${igloo.tomcat.90.server_xml}"/>
+      </setupTask>
+      <description>Conditionally set igloo.tomcat.* variables (see filter attribute on folders)</description>
     </setupTask>
     <description>Variables</description>
   </setupTask>
@@ -310,7 +451,7 @@
             xsi:type="setup:PreferenceTask"
             filter=""
             key="/instance/org.eclipse.wst.server.core/runtimes"
-            value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;runtimes>&#xA;  &lt;runtime id=&quot;Apache Tomcat v8.5&quot; location=&quot;${tomcat.location}&quot; name=&quot;Apache Tomcat v8.5&quot; runtime-type-id=&quot;org.eclipse.jst.server.tomcat.runtime.85&quot; timestamp=&quot;0&quot;/>&#xA;&lt;/runtimes>&#xA;"/>
+            value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;runtimes>&#xA;  &lt;runtime id=&quot;${igloo.tomcat.85.runtime.id}&quot; location=&quot;${igloo.tomcat.85.location}&quot; name=&quot;Apache Tomcat v${igloo.tomcat.85.version}&quot;  runtime-type-id=&quot;org.eclipse.jst.server.tomcat.runtime.${igloo.tomcat.85.version.id}&quot; timestamp=&quot;0&quot;/>&#xA;  &lt;runtime id=&quot;${igloo.tomcat.90.runtime.id}&quot; location=&quot;${igloo.tomcat.90.location}&quot; name=&quot;Apache Tomcat v${igloo.tomcat.90.version}&quot;  runtime-type-id=&quot;org.eclipse.jst.server.tomcat.runtime.${igloo.tomcat.90.version.id}&quot; timestamp=&quot;0&quot;/>&#xA;&lt;/runtimes>&#xA;"/>
       </setupTask>
       <setupTask
           xsi:type="setup:CompoundTask"
@@ -370,16 +511,52 @@
       id="group.tomcat"
       name="Tomcat">
     <setupTask
+        xsi:type="setup:CompoundTask"
+        name="Tomcat configuration initialization">
+      <setupTask
+          xsi:type="setup:ResourceCopyTask"
+          sourceURL="${igloo.tomcat.location|uri}/conf/catalina.policy"
+          targetURL="${user.home|uri}/git/${git.clone.name}/eclipse/tomcat-main/catalina.policy"/>
+      <setupTask
+          xsi:type="setup:ResourceCopyTask"
+          sourceURL="${igloo.tomcat.location|uri}/conf/server.xml"
+          targetURL="${user.home|uri}/git/${git.clone.name}/eclipse/tomcat-main/server.xml"/>
+      <setupTask
+          xsi:type="setup:ResourceCopyTask"
+          sourceURL="${igloo.tomcat.location|uri}/conf/catalina.properties"
+          targetURL="${user.home|uri}/git/${git.clone.name}/eclipse/tomcat-main/catalina.properties"/>
+      <setupTask
+          xsi:type="setup:ResourceCopyTask"
+          sourceURL="${igloo.tomcat.location|uri}/conf/tomcat-users.xml"
+          targetURL="${user.home|uri}/git/${git.clone.name}/eclipse/tomcat-main/tomcat-users.xml"/>
+      <setupTask
+          xsi:type="setup:ResourceCopyTask"
+          sourceURL="${igloo.tomcat.location|uri}/conf/tomcat-users.xsd"
+          targetURL="${user.home|uri}/git/${git.clone.name}/eclipse/tomcat-main/tomcat-users.xsd"/>
+      <setupTask
+          xsi:type="setup:ResourceCopyTask"
+          sourceURL="${igloo.tomcat.location|uri}/conf/web.xml"
+          targetURL="${user.home|uri}/git/${git.clone.name}/eclipse/tomcat-main/web.xml"/>
+      <setupTask
+          xsi:type="setup:ResourceCopyTask"
+          sourceURL="${igloo.tomcat.location|uri}/conf/context.xml"
+          targetURL="${user.home|uri}/git/${git.clone.name}/eclipse/tomcat-main/context.xml"/>
+      <setupTask
+          xsi:type="setup:ResourceCreationTask"
+          content="${igloo.tomcat.server_xml}"
+          targetURL="${user.home|uri}/git/${git.clone.name}/eclipse/tomcat-main/server.xml"/>
+    </setupTask>
+    <setupTask
         xsi:type="setup:ResourceCreationTask"
-        content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;servers>&#xA;  &lt;server auto-publish-setting=&quot;2&quot; auto-publish-time=&quot;1&quot; configuration-id=&quot;/${maven.project.name}/eclipse/tomcat-main&quot; deployDir=&quot;wtpwebapps&quot; hostname=&quot;localhost&quot; id=&quot;tomcat85&quot; name=&quot;tomcat85&quot; runtime-id=&quot;Apache Tomcat v8.5&quot; server-type=&quot;org.eclipse.jst.server.tomcat.85&quot; server-type-id=&quot;org.eclipse.jst.server.tomcat.85&quot; start-timeout=&quot;450&quot; stop-timeout=&quot;150&quot; testEnvironment=&quot;true&quot; timestamp=&quot;2&quot;>&#xA;    &lt;list key=&quot;modules&quot; value0=&quot;${webapp.name}::org.eclipse.jst.jee.server:${webapp.name}::jst.web::3.0&quot;/>&#xA;  &lt;/server>&#xA;&lt;/servers>"
+        content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;servers>&#xA;  &lt;server auto-publish-setting=&quot;2&quot; auto-publish-time=&quot;1&quot; configuration-id=&quot;/${maven.project.name}/eclipse/tomcat-main&quot; deployDir=&quot;wtpwebapps&quot; hostname=&quot;localhost&quot; id=&quot;${igloo.tomcat.server.id}&quot; name=&quot;Tomcat v${igloo.tomcat.version}&quot; runtime-id=&quot;${igloo.tomcat.runtime.id}&quot; server-type=&quot;org.eclipse.jst.server.tomcat.${igloo.tomcat.version.id}&quot; server-type-id=&quot;org.eclipse.jst.server.tomcat.${igloo.tomcat.version.id}&quot; start-timeout=&quot;450&quot; stop-timeout=&quot;150&quot; testEnvironment=&quot;true&quot; timestamp=&quot;2&quot;>&#xA;    &lt;list key=&quot;modules&quot; value0=&quot;${webapp.name}::org.eclipse.jst.jee.server:${webapp.name}::jst.web::3.0&quot;/>&#xA;  &lt;/server>&#xA;&lt;/servers>"
         targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.wst.server.core/servers.xml"
         encoding="UTF-8">
       <description>tomcat server integration</description>
     </setupTask>
     <setupTask
         xsi:type="setup:ResourceCreationTask"
-        content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;launchConfiguration type=&quot;org.eclipse.jst.server.tomcat.core.launchConfigurationType&quot;>&#xA;&lt;listAttribute key=&quot;org.eclipse.debug.ui.favoriteGroups&quot;>&#xA;&lt;listEntry value=&quot;org.eclipse.debug.ui.launchGroup.debug&quot;/>&#xA;&lt;listEntry value=&quot;org.eclipse.debug.ui.launchGroup.run&quot;/>&#xA;&lt;/listAttribute>&#xA;&lt;listAttribute key=&quot;org.eclipse.jdt.launching.CLASSPATH&quot;>&#xA;&lt;listEntry value=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#10;&amp;lt;runtimeClasspathEntry containerPath=&amp;quot;org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8&amp;quot; path=&amp;quot;2&amp;quot; type=&amp;quot;4&amp;quot;/&amp;gt;&amp;#10;&quot;/>&#xA;&lt;/listAttribute>&#xA;&lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.DEFAULT_CLASSPATH&quot; value=&quot;false&quot;/>&#xA;&lt;stringAttribute key=&quot;org.eclipse.jdt.launching.JRE_CONTAINER&quot; value=&quot;org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8&quot;/>&#xA;&lt;stringAttribute key=&quot;org.eclipse.jdt.launching.PROGRAM_ARGUMENTS&quot; value=&quot;start&quot;/>&#xA;&lt;stringAttribute key=&quot;org.eclipse.jdt.launching.VM_ARGUMENTS&quot; value=&quot;&quot; />&#xA;&lt;stringAttribute key=&quot;server-id&quot; value=&quot;tomcat85&quot;/>&#xA;&lt;/launchConfiguration>"
-        targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.debug.core/.launches/tomcat85.launch"
+        content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;launchConfiguration type=&quot;org.eclipse.jst.server.tomcat.core.launchConfigurationType&quot;>&#xA;&lt;listAttribute key=&quot;org.eclipse.debug.ui.favoriteGroups&quot;>&#xA;&lt;listEntry value=&quot;org.eclipse.debug.ui.launchGroup.debug&quot;/>&#xA;&lt;listEntry value=&quot;org.eclipse.debug.ui.launchGroup.run&quot;/>&#xA;&lt;/listAttribute>&#xA;&lt;listAttribute key=&quot;org.eclipse.jdt.launching.CLASSPATH&quot;>&#xA;&lt;listEntry value=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#10;&amp;lt;runtimeClasspathEntry containerPath=&amp;quot;org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8&amp;quot; path=&amp;quot;2&amp;quot; type=&amp;quot;4&amp;quot;/&amp;gt;&amp;#10;&quot;/>&#xA;&lt;/listAttribute>&#xA;&lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.DEFAULT_CLASSPATH&quot; value=&quot;false&quot;/>&#xA;&lt;stringAttribute key=&quot;org.eclipse.jdt.launching.JRE_CONTAINER&quot; value=&quot;org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8&quot;/>&#xA;&lt;stringAttribute key=&quot;org.eclipse.jdt.launching.PROGRAM_ARGUMENTS&quot; value=&quot;start&quot;/>&#xA;&lt;stringAttribute key=&quot;org.eclipse.jdt.launching.VM_ARGUMENTS&quot; value=&quot;&quot; />&#xA;&lt;stringAttribute key=&quot;server-id&quot; value=&quot;${igloo.tomcat.server.id}&quot;/>&#xA;&lt;/launchConfiguration>"
+        targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.debug.core/.launches/${igloo.tomcat.server.id}.launch"
         encoding="UTF-8">
       <description>tomcat server integration</description>
     </setupTask>
