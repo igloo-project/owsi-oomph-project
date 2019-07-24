@@ -17,46 +17,48 @@
         xsi:type="setup:VariableTask"
         name="git.project.name"
         storageURI="scope://Workspace"
-        label="Nom du projet git">
-      <description>Nom du projet (correspond à la dernière partie du chemin dans l'url du dépôt)</description>
+        label="Git project name">
+      <description>This is the last part in the git url (e.g. *project* for *git@github.com:igloo-project/my-project.git*)</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="repository.choice"
+        defaultValue="git@github.com:igloo-project/$${git.project.name}.git"
         storageURI="scope://Workspace"
-        label="Url du dépôt">
-      <description>Url du dépôt</description>
+        label="Git URL">
+      <description>Full Git URL, e.g. git@github.com:igloo-project/my-project.git</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="git.clone.name"
+        defaultValue="${git.project.name}"
         storageURI="scope://Workspace"
-        label="Nom du clone git">
-      <description>Nom du répertoire de clone git (dans ${user.home}/git)</description>
+        label="Clone folder name">
+      <description>e.g. my-project; change it if you want to manage several clone of the same project, or if there is a name conflict</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="maven.project.name"
         defaultValue="$${git.project.name}"
         storageURI="scope://Workspace"
-        label="Nom du projet maven">
-      <description>Nom du projet maven de l'application</description>
+        label="Maven root artifactId">
+      <description>Overrides this if the root artifactId is not the git repository name</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="git.clone.branch"
         defaultValue="master"
         storageURI="scope://Workspace"
-        label="Branche">
-      <description>Branche</description>
+        label="Targetted git branch">
+      <description>This branch is used only when repository is cloned; existing clone is not switched</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="webapp.name"
         defaultValue="$${maven.project.name}-webapp"
         storageURI="scope://Workspace"
-        label="Nom de la webapp">
-      <description>Nom de la webapp qui doit être déployée</description>
+        label="Webapp artifactId">
+      <description>Override this if your webapp artifactId is not named &lt;root artifactId>-webapp</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
@@ -70,7 +72,7 @@
       <choice
           value="9.0"
           label="9.0"/>
-      <description>Tomcat version (for servers initialization)</description>
+      <description>Tomcat version (for WST servers initialization)</description>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -147,8 +149,9 @@
           xsi:type="setup:VariableTask"
           name="igloo.tomcat.server_xml.context"
           value="&lt;Context docBase=&quot;${webapp.name}&quot; path=&quot;/${maven.project.name}&quot; reloadable=&quot;true&quot; source=&quot;org.eclipse.jst.jee.server:${webapp.name}&quot;/>">
-        <description>&lt;Context ... /> injected in server.xml to add webapp</description>
+        <description>&lt;Context ... /> injected in server.xml to configure webapp</description>
       </setupTask>
+      <description>Definition by version of tomcat attributes: ids, installation location, server.xml file, ...</description>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
