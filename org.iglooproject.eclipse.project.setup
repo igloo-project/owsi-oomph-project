@@ -16,15 +16,22 @@
       name="Variables">
     <setupTask
         xsi:type="setup:VariableTask"
+        name="git.group.name"
+        storageURI="scope://Workspace"
+        label="Git group name">
+      <description>This is the middle part in the git url (e.g. *igloo-project* for *git@github.com:igloo-project/my-project.git*)</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
         name="git.project.name"
         storageURI="scope://Workspace"
         label="Git project name">
-      <description>This is the last part in the git url (e.g. *project* for *git@github.com:igloo-project/my-project.git*)</description>
+      <description>This is the last part in the git url (e.g. *my-project* for *git@github.com:igloo-project/my-project.git*)</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="repository.choice"
-        defaultValue="git@github.com:igloo-project/$${git.project.name}.git"
+        defaultValue="git@github.com:$${git.group.name}/$${git.project.name}.git"
         storageURI="scope://Workspace"
         label="Git URL">
       <description>Full Git URL, e.g. git@github.com:igloo-project/my-project.git</description>
