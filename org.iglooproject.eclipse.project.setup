@@ -496,6 +496,14 @@
             key="/instance/org.jboss.tools.maven.apt/org.jboss.tools.maven.apt.mode"
             value="maven_execution"/>
       </setupTask>
+      <setupTask
+          xsi:type="setup:ResourceCreationTask"
+          force="true"
+          content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;catalog xmlns=&quot;urn:oasis:names:tc:entity:xmlns:xml:catalog&quot;>&#xA;  &lt;system systemId=&quot;http://www.springframework.org/schema/cache/spring-cache-4.0.xsd&quot; uri=&quot;https://www.springframework.org/schema/cache/spring-cache-4.0.xsd&quot;/>&#xA;  &lt;system systemId=&quot;https://www.springframework.org/schema/security/spring-security-5.2.xsd&quot; uri=&quot;https://raw.githubusercontent.com/spring-projects/spring-security/master/config/src/main/resources/org/springframework/security/config/spring-security-5.2.xsd&quot;/>&#xA;&lt;/catalog>"
+          targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.wst.xml.core/user_catalog.xml"
+          encoding="UTF-8">
+        <description>XML Catalogs</description>
+      </setupTask>
     </setupTask>
     <description>Preferences</description>
   </setupTask>
